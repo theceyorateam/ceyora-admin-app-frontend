@@ -6,5 +6,6 @@ export { mockHostService } from './services/hosts';
 export { mockDurationService } from './services/durations';
 export { mockJourneyService } from './services/journeys';
 export { mockPackageService } from './services/packages';
+export { mockBookingService } from './services/bookings';
 
 // You can add and export more mock services here as your app grows

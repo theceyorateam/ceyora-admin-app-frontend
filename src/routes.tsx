@@ -1,3 +1,4 @@
+// src/routes.tsx
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from './components/auth/ProtectedRoute';
@@ -16,9 +17,12 @@ import JourneyDetailPage from './pages/journeys/JourneyDetailPage';
 import JourneyFormPage from './pages/journeys/JourneyFormPage';
 import PackageDetailPage from './pages/packages/PackageDetailPage';
 import PackageFormPage from './pages/packages/PackageFormPage';
+import BookingsPage from './pages/bookings/BookingsPage';
+import BookingDetailPage from './pages/bookings/BookingDetailPage';
+import BookingFormPage from './pages/bookings/BookingFormPage';
+import PublicBookingPage from './pages/bookings/PublicBookingPage';
+import RefundPolicyPage from './pages/bookings/RefundPolicyPage';
 
-// Placeholder pages for other sections
-const BookingsPage = () => <div>Bookings Page (Coming Soon)</div>;
 const NotFoundPage = () => <div>Page Not Found</div>;
 
 const AppRoutes: React.FC = () => {
@@ -29,6 +33,10 @@ const AppRoutes: React.FC = () => {
         <Route index element={<Navigate to="/login" replace />} />
         <Route path="login" element={<LoginPage />} />
       </Route>
+
+      {/* Public Booking Routes */}
+      <Route path="/book" element={<BookingFormPage />} />
+      <Route path="/booking/:token" element={<PublicBookingPage />} />
 
       {/* Protected Admin Routes */}
       <Route
@@ -58,10 +66,21 @@ const AppRoutes: React.FC = () => {
         <Route path="hosts/:id" element={<HostDetailPage />} />
         <Route path="hosts/edit/:id" element={<HostFormPage />} />
         
+        {/* Locations Routes */}
         <Route path="locations" element={<LocationsPage />} />
+        
+        {/* Tags Routes */}
         <Route path="tags" element={<TagsPage />} />
+        
+        {/* Durations Routes */}
         <Route path="durations" element={<DurationsPage />} />
+        
+        {/* Bookings Routes - FIXED ORDER */}
         <Route path="bookings" element={<BookingsPage />} />
+        <Route path="bookings/new" element={<BookingFormPage />} />
+        <Route path="bookings/refund-policy" element={<RefundPolicyPage />} />
+        <Route path="bookings/edit/:id" element={<BookingFormPage />} />
+        <Route path="bookings/:id" element={<BookingDetailPage />} />
       </Route>
       
       {/* Not Found */}
