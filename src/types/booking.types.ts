@@ -1,4 +1,4 @@
-// src/types/booking.types.ts (updated)
+// src/types/booking.types.ts (updated with noRefundBeforeDays)
 import { User } from './auth.types';
 import { Journey } from './journey.types';
 import { Package } from './package.types';
@@ -8,6 +8,7 @@ export type BookingStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled' 
 export interface RefundPolicy {
   fullRefundBeforeDays: number;  // Number of days before journey start date for full refund
   partialRefundBeforeDays: number; // Number of days before journey start date for partial refund
+  noRefundBeforeDays: number; // Number of days before journey start date for no refund
   partialRefundPercentage: number; // Percentage of refund for partial refunds (0-100)
 }
 

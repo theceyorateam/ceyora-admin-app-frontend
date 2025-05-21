@@ -78,38 +78,44 @@ const PublicBookingPage: React.FC = () => {
     }
   };
 
-  // Calculate refund eligibility
-  const calculateRefundEligibility = () => {
-    if (!booking || !refundPolicy) return null;
+  // Calculate refund eligibility (updated version for the PublicBookingPage)
+const calculateRefundEligibility = () => {
+  if (!booking || !refundPolicy) return null;
 
-    if (booking.status !== 'confirmed' && booking.status !== 'pending') {
-      return { eligible: false, message: 'Only confirmed or pending bookings are eligible for refund.' };
-    }
+  if (booking.status !== 'confirmed' && booking.status !== 'pending') {
+    return { eligible: false, message: 'Only confirmed or pending bookings are eligible for refund.' };
+  }
 
-    const journeyDate = new Date(booking.journeyDate);
-    const currentDate = new Date();
-    const daysRemaining = Math.floor((journeyDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
-    
-    if (daysRemaining >= refundPolicy.fullRefundBeforeDays) {
-      return { 
-        eligible: true, 
-        fullRefund: true, 
-        message: `Eligible for full refund (${daysRemaining} days before journey)` 
-      };
-    } else if (daysRemaining >= refundPolicy.partialRefundBeforeDays) {
-      return { 
-        eligible: true, 
-        fullRefund: false, 
-        partialPercentage: refundPolicy.partialRefundPercentage,
-        message: `Eligible for partial refund (${refundPolicy.partialRefundPercentage}%)` 
-      };
-    } else {
-      return { 
-        eligible: false, 
-        message: `No refund available (${daysRemaining} days before journey)` 
-      };
-    }
-  };
+  const journeyDate = new Date(booking.journeyDate);
+  const currentDate = new Date();
+  const daysRemaining = Math.floor((journeyDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
+  
+  if (daysRemaining >= refundPolicy.fullRefundBeforeDays) {
+    return { 
+      eligible: true, 
+      fullRefund: true, 
+      message: `Eligible for full refund (${daysRemaining} days before journey)` 
+    };
+  } else if (daysRemaining >= refundPolicy.partialRefundBeforeDays) {
+    return { 
+      eligible: true, 
+      fullRefund: false, 
+      partialPercentage: refundPolicy.partialRefundPercentage,
+      message: `Eligible for partial refund (${refundPolicy.partialRefundPercentage}%)` 
+    };
+  } else if (daysRemaining >= refundPolicy.noRefundBeforeDays) {
+    return { 
+      eligible: false, 
+      message: `You can cancel, but no refund will be provided (${daysRemaining} days before journey)` 
+    };
+  } else {
+    return { 
+      eligible: false, 
+      allowCancellation: false,
+      message: `Cancellation is not allowed (less than ${refundPolicy.noRefundBeforeDays} days before journey)` 
+    };
+  }
+};
 
   const refundEligibility = booking && refundPolicy ? calculateRefundEligibility() : null;
 

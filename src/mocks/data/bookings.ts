@@ -1,4 +1,4 @@
-// src/mocks/data/bookings.ts (updated)
+// src/mocks/data/bookings.ts (updated with noRefundBeforeDays)
 import { Booking, BookingStatus, RefundPolicy } from '../../types/booking.types';
 
 // Helper function to generate a random access token
@@ -11,6 +11,7 @@ const generateAccessToken = () => {
 export const refundPolicy: RefundPolicy = {
   fullRefundBeforeDays: 7,  // Full refund if cancelled 7 days or more before journey date
   partialRefundBeforeDays: 3, // Partial refund if cancelled 3-6 days before journey date
+  noRefundBeforeDays: 1, // No refund if cancelled less than 1 day before journey date
   partialRefundPercentage: 50 // 50% refund for partial refunds
 };
 

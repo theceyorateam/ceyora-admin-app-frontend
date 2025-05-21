@@ -8,6 +8,7 @@ const RefundPolicyPage: React.FC = () => {
   const [refundPolicy, setRefundPolicy] = useState<RefundPolicy>({
     fullRefundBeforeDays: 7,
     partialRefundBeforeDays: 3,
+    noRefundBeforeDays: 1,
     partialRefundPercentage: 50
   });
   const [loading, setLoading] = useState<boolean>(true);
@@ -53,6 +54,14 @@ const RefundPolicyPage: React.FC = () => {
       // Validate values
       if (refundPolicy.fullRefundBeforeDays <= refundPolicy.partialRefundBeforeDays) {
         throw new Error('Full refund days must be greater than partial refund days');
+      }
+      
+      if (refundPolicy.partialRefundBeforeDays <= refundPolicy.noRefundBeforeDays) {
+        throw new Error('Partial refund days must be greater than no refund days');
+      }
+      
+      if (refundPolicy.noRefundBeforeDays < 0) {
+        throw new Error('No refund days must be 0 or greater');
       }
       
       if (refundPolicy.partialRefundPercentage <= 0 || refundPolicy.partialRefundPercentage >= 100) {
@@ -140,7 +149,7 @@ const RefundPolicyPage: React.FC = () => {
                   id="partialRefundBeforeDays"
                   name="partialRefundBeforeDays"
                   type="number"
-                  min="0"
+                  min="1"
                   max="30"
                   value={refundPolicy.partialRefundBeforeDays}
                   onChange={handleChange}
@@ -153,6 +162,32 @@ const RefundPolicyPage: React.FC = () => {
               </div>
               <p className="mt-1 text-xs text-ocean-mist">
                 Customers will receive a partial refund if they cancel between {refundPolicy.partialRefundBeforeDays} and {refundPolicy.fullRefundBeforeDays-1} days before the journey date.
+              </p>
+            </div>
+
+            {/* No Refund Days - NEW FIELD */}
+            <div>
+              <label htmlFor="noRefundBeforeDays" className="block text-sm font-medium text-ocean-mist mb-1">
+                No Refund if Cancelled Before
+              </label>
+              <div className="flex">
+                <input
+                  id="noRefundBeforeDays"
+                  name="noRefundBeforeDays"
+                  type="number"
+                  min="0"
+                  max="30"
+                  value={refundPolicy.noRefundBeforeDays}
+                  onChange={handleChange}
+                  className="block w-24 px-3 py-2 border border-gray-300 rounded-l-md shadow-sm focus:outline-none focus:ring-ceyora-clay focus:border-ceyora-clay"
+                  required
+                />
+                <span className="inline-flex items-center px-3 py-2 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500">
+                  days
+                </span>
+              </div>
+              <p className="mt-1 text-xs text-ocean-mist">
+                Customers can cancel without refund if they cancel between {refundPolicy.noRefundBeforeDays} and {refundPolicy.partialRefundBeforeDays-1} days before the journey date.
               </p>
             </div>
 
@@ -183,11 +218,11 @@ const RefundPolicyPage: React.FC = () => {
             </div>
           </div>
 
-          {/* No Refund Policy */}
+          {/* No Refund / No Cancellation Policy */}
           <div className="p-4 border border-gray-200 rounded-md bg-gray-50">
-            <h3 className="text-sm font-medium text-teakwood-brown mb-2">No Refund Policy</h3>
+            <h3 className="text-sm font-medium text-teakwood-brown mb-2">No Cancellation Policy</h3>
             <p className="text-sm text-ocean-mist">
-              No refunds will be provided if the booking is cancelled less than {refundPolicy.partialRefundBeforeDays} days before the journey date.
+              Bookings cannot be cancelled less than {refundPolicy.noRefundBeforeDays} days before the journey date.
             </p>
           </div>
 

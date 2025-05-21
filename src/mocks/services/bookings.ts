@@ -19,7 +19,7 @@ const generateAccessToken = () => {
          Math.random().toString(36).substring(2, 15);
 };
 
-// Helper function to check if a booking is eligible for refund
+// Helper function to check if a booking is eligible for refund (updated version)
 const calculateRefundAmount = (booking: Booking): { isEligible: boolean; amount: number; isFullRefund: boolean } => {
   // Booking must be confirmed or pending to be eligible for refund
   if (booking.status !== 'confirmed' && booking.status !== 'pending') {
@@ -39,8 +39,11 @@ const calculateRefundAmount = (booking: Booking): { isEligible: boolean; amount:
     // Partial refund
     const refundAmount = booking.totalPriceLKR * (refundPolicy.partialRefundPercentage / 100);
     return { isEligible: true, amount: refundAmount, isFullRefund: false };
+  } else if (daysRemaining >= refundPolicy.noRefundBeforeDays) {
+    // No refund, but can still cancel
+    return { isEligible: false, amount: 0, isFullRefund: false };
   } else {
-    // No refund
+    // No cancellation allowed
     return { isEligible: false, amount: 0, isFullRefund: false };
   }
 };
